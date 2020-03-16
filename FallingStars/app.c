@@ -111,10 +111,6 @@ int AppNew(char*strWinTitle) {
 	app.genOrgOld.x = app.genOrg.x = app.windowSize.x / 2;
 	app.genOrgOld.y = app.genOrg.y = app.windowSize.y / 2;
 	
-//	// Génération d'étoile souhaitée
-//	for (int k = 0; k < STAR_FORCED_GEN_NB; k++) {
-//		app.pStars[k] = StarNew(app.windowSize.x / 2, app.windowSize.y / 2);
-//	}
 
 
 	app.nTimerID = SDL_AddTimer(ANIMATION_TICK, _AppAnimateCallBack, NULL);
@@ -125,11 +121,8 @@ int AppNew(char*strWinTitle) {
 int AppDel(void) {
 	
 	//Destroy remaining stars section--------------------------------------------//
-	for (int k = 0; k < STAR_NB_MAX; k++) {
-		if (app.pStars[k] != NULL) {
-			app.pStars[k] = StarDel(app.pStars[k], app.pRenderer, app.colorBkgnd);
-		}
-	}
+	//To complete...
+
 
 	//---------------------------------------------------------------------------//
 
@@ -207,49 +200,27 @@ int AppRun(void) {
 
 
 Uint32 _AppAnimateCallBack(Uint32 interval, void*pParam) {
+
 	//Falling stars moving section------------------------------------------------------------------------------//
 	for (int k = 0; k < STAR_NB_MAX; k++) {
-		if (app.pStars[k] != NULL) { // Animation quand la case n'est pas vide
-			if(StarMove(app.pStars[k], app.pRenderer, app.colorBkgnd, app.windowSize, SCREEN_OUT_PADDING_W, SCREEN_OUT_PADDING_H) == -1) { // Si l'étoile sort de
-																								     // la fenêtre d'affichage
-				app.pStars[k] = StarDel(app.pStars[k], app.pRenderer, app.colorBkgnd);
-			}
-		}
+		//To complete...
+
 	}
 
-//	for (int k = 0; k < STAR_FORCED_GEN_NB; k++) {
-//		if (app.pStars[k] != NULL) {
-//			if(StarMove(app.pStars[k], app.pRenderer, app.colorBkgnd, app.windowSize, 0, 0) == -1) {
-//				app.pStars[k] = StarDel(app.pStars[k], app.pRenderer, app.colorBkgnd);
-//			}
-//		}
-//	}
 
 	//Generation rate timeout section----------------------------------------------------------------------------//
-	if (app.timeOut) { // si timeOut n'est pas nulle
+	if (app.timeOut) {
 		if (--app.timeOut == 0) {
-			app.timeOut = rand()%(GEN_SEQUENCE_TIMEOUT_MAX - GEN_SEQUENCE_TIMEOUT_MIN + 1) + GEN_SEQUENCE_TIMEOUT_MIN;
+			//To complete...
 
-			int nbStarsToGenerate = rand()%(STAR_GEN_NB_MAX - STAR_GEN_NB_MIN + 1) + STAR_GEN_NB_MIN;
 
-			for (int k = 0; (k < STAR_NB_MAX) && (nbStarsToGenerate); k++) {
-				if (app.pStars[k] == NULL) {
-					app.pStars[k] = StarNew(app.genOrg.x , app.genOrg.y);
-					nbStarsToGenerate--;
-				}
-			}
 		}
-
 	}
 
 	//Stars mouse cursor move tracking section------------------------------------------------------------------//
 	if (IsChangeOriginAsked()) {
 		//Take into account the falling stars generation origin change--------------------------------------//
-		for (int k = 0; k < STAR_NB_MAX; k++) {
-			if (app.pStars[k] != NULL) { // Animation quand la case n'est pas vide
-				StarOffsetLocation(app.pStars[k], app.genOrgOffset, app.pRenderer, app.colorBkgnd);
-			}
-		}
+		//To complete...
 
 
 		//Acknowledgment of the origin change------------------------//

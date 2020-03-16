@@ -15,6 +15,9 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Container\container.c">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
     <ClCompile Include="app.c">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
@@ -24,19 +27,16 @@
     <ClCompile Include="star.c">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="Container\container.c">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="app.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="star.h">
+    <ClInclude Include="Container\container.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="Container\container.h">
-      <Filter>Fichiers sources</Filter>
+    <ClInclude Include="star.h">
+      <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
