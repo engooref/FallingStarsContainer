@@ -7,7 +7,7 @@
 
 #include"app.h"
 #include"star.h"
-
+#include "Container\container.h"
 
 //Private function prototypes--------------------------------------------//
 Uint32 _AppAnimateCallBack(Uint32 interval, void*pParam);
@@ -37,8 +37,7 @@ static struct {
 	SDL_Color			colorBkgnd;
 	SDL_TimerID			nTimerID;
 
-	struct s_star	*	pStars[STAR_NB_MAX];
-
+		
 	int					timeOut;
 
 	SDL_Point			genOrg,

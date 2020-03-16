@@ -5,6 +5,8 @@
  *      Author: eleve
  */
 
+typedef struct s_container*	t_pContainer;
+
 typedef void*(*t_ptfV)(void*);
 
 typedef void*(*t_ptfVV)(void*, void*);
@@ -12,22 +14,21 @@ typedef void*(*t_ptfVV)(void*, void*);
 typedef void*(*t_ptfVVV)(void*, void*, void*);
 
 struct s_container* ContainerNew(t_ptfV pDelElemFunc);
+struct s_container* ContainerDel(t_pContainer pContainer);
 
-struct s_container* ContainerDel(struct s_container*pContainer);
+void* ContainerPushback(t_pContainer pContainer, void*pElem);
+void* ContainerPushfront(t_pContainer pContainer, void*pElem);
+void* ContainerPushat(t_pContainer pContainer, void*pElem, int nAt);
 
-void* ContainerPushback(struct s_container*pContainer, void*pElem);
-void* ContainerPushfront(struct s_container*pContainer, void*pElem);
-void* ContainerPushat(struct s_container*pContainer, void*pElem, int nAt);
+void* ContainerGetback(t_pContainer pContainer);
+void* ContainerGetfront(t_pContainer pContainer);
+void* ContainerGetat(t_pContainer pContainer, int nAt);
 
-void* ContainerGetback(struct s_container*pContainer);
-void* ContainerGetfront(struct s_container*pContainer);
-void* ContainerGetat(struct s_container*pContainer, int nAt);
+void* ContainerPopback(t_pContainer pContainer);
+void* ContainerPopfront(t_pContainer pContainer);
+void* ContainerPopat(t_pContainer pContainer, int nAt);
 
-void* ContainerPopback(struct s_container*pContainer);
-void* ContainerPopfront(struct s_container*pContainer);
-void* ContainerPopat(struct s_container*pContainer, int nAt);
-
-void* ContainerParse(struct s_container*pContainer, t_ptfVV pfParseFunc, void*pParam);
-void* ContainerSort(struct s_container*pContainer, t_ptfVVV pSortFunc, void*pParam);
+void* ContainerParse(t_pContainer pContainer, t_ptfVV pfParseFunc, void*pParam);
+void* ContainerSort(t_pContainer pContainer, t_ptfVVV pSortFunc, void*pParam);
 
 

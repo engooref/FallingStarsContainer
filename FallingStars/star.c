@@ -15,9 +15,9 @@
 
 #include "star.h"
 
-struct s_star {
+typedef struct{
 	//To complete...
-
+	SDL_Point Star;
 };
 
 //Star module Private Prototypes declaration----------------------------------------//
