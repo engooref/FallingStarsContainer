@@ -37,8 +37,10 @@ static struct {
 	SDL_Color			colorBkgnd;
 	SDL_TimerID			nTimerID;
 
-		
+	t_pContainer		pStars;
+	t_starParams		starsParams;
 	int					timeOut;
+	char			*	pWindowTitleStr;
 
 	SDL_Point			genOrg,
 						genOrgOld,
@@ -49,7 +51,7 @@ static struct {
 int AppNew(char*strWinTitle) {
 
 	app.nStatus = ST_ALL_CLEARED;
-
+	
 	app.nWindowID = -1;
 	app.pRenderer = NULL;
 	app.pWindow = NULL;
@@ -58,7 +60,8 @@ int AppNew(char*strWinTitle) {
 	app.colorBkgnd.r = 0;
 	app.colorBkgnd.r = 0;
 	app.colorBkgnd.a = 255;
-
+	app.pWindowTitleStr = WINDOW_TITLE_STR;
+	
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) != 0) {
 		fprintf(stderr, "SDL video init failed: %s\n", SDL_GetError());
 		return EXIT_FAILURE;
@@ -100,17 +103,22 @@ int AppNew(char*strWinTitle) {
 	srand((unsigned int)time(NULL));
 
 
-	//Initializing stars structure section---------------------------------------//
-	for (int k = 0; k < STAR_NB_MAX; k++) {
-		app.pStars[k] = NULL;	//Any star has been created as yet!
-	}
-
+	
 	//---------------------------------------------------------------------------//
 	app.timeOut = GEN_SEQUENCE_TIMEOUT_MIN;
 	app.genOrgOld.x = app.genOrg.x = app.windowSize.x / 2;
 	app.genOrgOld.y = app.genOrg.y = app.windowSize.y / 2;
 	
+	//Initialisation de la structure starParams----------------------------------//
+	app.starsParams.pRenderer = app.pRenderer;
+	app.starsParams.pColorBkgnd = &app.colorBkgnd;
+	app.starsParams.pOffset = &app.genOrgOffset;
+	app.starsParams.pWhMax = &app.windowSize;
+	app.starsParams.iPaddingW = SCREEN_OUT_PADDING_W;
+	app.starsParams.iPaddingH = SCREEN_OUT_PADDING_H;
 
+	//Création du conteneur------------------------------------------------------//
+	app.pStars = ContainerNew((t_ptfVV)StarDel);
 
 	app.nTimerID = SDL_AddTimer(ANIMATION_TICK, _AppAnimateCallBack, NULL);
 
@@ -120,13 +128,11 @@ int AppNew(char*strWinTitle) {
 int AppDel(void) {
 	
 	//Destroy remaining stars section--------------------------------------------//
-	//To complete...
-
-
+	app.pStars = ContainerDel(app.pStars, &app.starsParams);
 	//---------------------------------------------------------------------------//
 
 	SDL_RemoveTimer(app.nTimerID);
-
+	
 	if (app.pWindow) {
 		SDL_DestroyWindow(app.pWindow);
 		app.pWindow = NULL;
@@ -135,6 +141,7 @@ int AppDel(void) {
 		SDL_DestroyRenderer(app.pRenderer);
 		app.pRenderer = NULL;
 	}
+	
 	app.nWindowID = -1;
 	SDL_Quit();
 
@@ -200,19 +207,23 @@ int AppRun(void) {
 
 Uint32 _AppAnimateCallBack(Uint32 interval, void*pParam) {
 
+	char buf[128];
 	//Falling stars moving section------------------------------------------------------------------------------//
-	for (int k = 0; k < STAR_NB_MAX; k++) {
-		//To complete...
+	
+	ContainerParseDelIf(app.pStars, (t_ptfVV)StarMove, &app.starsParams);
 
-	}
-
+	sprintf(buf, "%s [%03d]", app.pWindowTitleStr, ContainerCard(app.pStars));
+	SDL_SetWindowTitle(app.pWindow, buf);
 
 	//Generation rate timeout section----------------------------------------------------------------------------//
 	if (app.timeOut) {
 		if (--app.timeOut == 0) {
-			//To complete...
 
+			app.timeOut = rand() % (GEN_SEQUENCE_TIMEOUT_MAX - GEN_SEQUENCE_TIMEOUT_MIN + 1) + GEN_SEQUENCE_TIMEOUT_MIN;
 
+			int nbStarsToGenerate = rand() % (STAR_GEN_NB_MAX - STAR_GEN_NB_MIN + 1) + STAR_GEN_NB_MIN;
+
+			while (--nbStarsToGenerate != 0) { ContainerPushback(app.pStars, &app.starsParams); }
 		}
 	}
 

@@ -39,11 +39,11 @@ t_node* NodeNew(t_node*pPrev, t_node*pNext, void*pElem) {
 	return pNewNode;
 }
 
-t_node* NodeDel(t_node*pNode, t_ptfV pDelElemFunc) {
+t_node* NodeDel(t_node*pNode, t_ptfVV pDelElemFunc, void*pParam) {
 
 	assert(pNode != NULL);
 
-	if(pDelElemFunc != NULL){ pDelElemFunc(pNode->pElem); }
+	if(pDelElemFunc != NULL){ pDelElemFunc(pNode->pElem, pParam); pNode->pElem = NULL;}
 	else 					{ free(pNode->pElem); }
 
 	if(pNode->pPrev != NULL)
@@ -51,21 +51,55 @@ t_node* NodeDel(t_node*pNode, t_ptfV pDelElemFunc) {
 	if(pNode->pNext != NULL)
 		pNode->pNext->pPrev = pNode->pPrev;
 
-
-
 	free(pNode);
 
 	return NULL;
+}
+
+t_node* NodeDelReturnNext(t_node*pNode, t_ptfVV pDelElemFunc, void*pParam) {
+
+	assert(pNode != NULL);
+	t_node* NodeNext = pNode->pNext;
+	
+	if (pDelElemFunc != NULL) { pDelElemFunc(pNode->pElem, pParam); pNode->pElem = NULL; }
+	else {free(pNode->pElem);}
+
+	if (pNode->pPrev != NULL)
+		pNode->pPrev->pNext = pNode->pNext;
+	if (pNode->pNext != NULL)
+		pNode->pNext->pPrev = pNode->pPrev;
+
+	free(pNode);
+
+	return NodeNext;
+}
+
+t_node* NodeDelReturnPrev(t_node*pNode, t_ptfVV pDelElemFunc, void*pParam) {
+
+	assert(pNode != NULL);
+	t_node* NodePrev = pNode->pPrev;
+
+	if (pDelElemFunc != NULL) { pDelElemFunc(pNode->pElem, pParam); }
+	else { free(pNode->pElem); }
+
+	if (pNode->pPrev != NULL)
+		pNode->pPrev->pNext = pNode->pNext;
+	if (pNode->pNext != NULL)
+		pNode->pNext->pPrev = pNode->pPrev;
+
+	free(pNode);
+
+	return NodePrev;
 }
 
 struct s_container {
 	int			nCard;
 	t_node*		pHead;
 	t_node*		pTail;
-	t_ptfV		pDelElemFunc;
+	t_ptfVV		pDelElemFunc;
 };
 
-struct s_container* ContainerNew(t_ptfV pDelElemFunc) {
+struct s_container* ContainerNew(t_ptfVV pDelElemFunc) {
 	
 	struct s_container* pNewContainer;
 
@@ -81,14 +115,14 @@ struct s_container* ContainerNew(t_ptfV pDelElemFunc) {
 	return pNewContainer;
 }
 
-struct s_container* ContainerDel(t_pContainer pContainer) {
+struct s_container* ContainerDel(t_pContainer pContainer, void*pParam) {
 
 	assert(pContainer != NULL);
 
 	while(pContainer->pHead != NULL){
 		pContainer->pTail = pContainer->pHead;
 		pContainer->pHead = pContainer->pHead->pNext;
-		NodeDel(pContainer->pTail, pContainer->pDelElemFunc);
+		NodeDel(pContainer->pTail, pContainer->pDelElemFunc, pParam);
 		pContainer->nCard--;
 	}
 
@@ -192,55 +226,52 @@ void* ContainerGetat(t_pContainer pContainer, int nAt){
 	else { return NULL;}
 }
 
-void* ContainerPopback(t_pContainer pContainer){
-	if(pContainer->pTail->pElem) {
-
-		t_node* pTailC = pContainer->pTail->pPrev;
-		void* pElem = pContainer->pTail->pElem;
-		NodeDel(pContainer->pTail, pContainer->pDelElemFunc);
-		pContainer->pTail = pTailC;
-		pContainer->nCard--;
-		return pElem;
-
-	} else { return NULL; }
-}
-void* ContainerPopfront(t_pContainer pContainer){
-	if(pContainer->pHead->pElem) {
-
-		t_node* pHeadC = pContainer->pHead->pNext;
-
-		void* pElem = pContainer->pHead->pElem;
-		NodeDel(pContainer->pHead, pContainer->pDelElemFunc);
-		pContainer->pHead = pHeadC;
-		pContainer->nCard--;
-		return pElem;
-
-	} else { return NULL; }
-}
-void* ContainerPopat(t_pContainer pContainer, int nAt){
-	if(nAt <= pContainer->nCard){
-			t_node* pScan = pContainer->pHead;
-			while (--nAt >= 0) { pScan = pScan->pNext; }
-			if(pScan->pElem) {
-
-				void* pElem = pScan->pElem;
-				NodeDel(pScan, pContainer->pDelElemFunc);
-				pContainer->nCard--;
-				return pElem;
-
-			} else { return NULL; }
-		}
-		else { return NULL; }
-}
+//void* ContainerPopback(t_pContainer pContainer){
+//	if(pContainer->pTail->pElem) {
+//
+//		t_node* pTailC = pContainer->pTail->pPrev;
+//		void* pElem = pContainer->pTail->pElem;
+//		NodeDel(pContainer->pTail, pContainer->pDelElemFunc, pParam);
+//		pContainer->pTail = pTailC;
+//		pContainer->nCard--;
+//		return pElem;
+//
+//	} else { return NULL; }
+//}
+//void* ContainerPopfront(t_pContainer pContainer){
+//	if(pContainer->pHead->pElem) {
+//
+//		t_node* pHeadC = pContainer->pHead->pNext;
+//
+//		void* pElem = pContainer->pHead->pElem;
+//		NodeDel(pContainer->pHead, pContainer->pDelElemFunc, pParam);
+//		pContainer->pHead = pHeadC;
+//		pContainer->nCard--;
+//		return pElem;
+//
+//	} else { return NULL; }
+//}
+//void* ContainerPopat(t_pContainer pContainer, int nAt){
+//	if(nAt <= pContainer->nCard){
+//			t_node* pScan = pContainer->pHead;
+//			while (--nAt >= 0) { pScan = pScan->pNext; }
+//			if(pScan->pElem) {
+//
+//				void* pElem = pScan->pElem;
+//				NodeDel(pScan, pContainer->pDelElemFunc);
+//				pContainer->nCard--;
+//				return pElem;
+//
+//			} else { return NULL; }
+//		}
+//		else { return NULL; }
+//}
 
 void* ContainerParse(t_pContainer pContainer, t_ptfVV pfParseFunc, void*pParam){
 
 	t_node* pScan;
 	pScan = pContainer->pHead;
-	while(pScan != NULL) {
-		pfParseFunc(pScan->pElem, pParam);
-		pScan = pScan->pNext;
-	}
+	while( (pScan != NULL) && (pfParseFunc(pScan->pElem, pParam) == NULL) ) pScan = pScan->pNext;
 	return NULL;
 }
 
@@ -255,4 +286,35 @@ void* ContainerSort(t_pContainer pContainer, t_ptfVVV pSortFunc, void*pParam) {
 
 	return NULL;
 
+}
+
+void* ContainerParseDelIf(t_pContainer pContainer, t_ptfVV pfParseFunc, void*pParam) {
+
+	t_node* pScan;
+	pScan = pContainer->pHead;
+	while (pScan != NULL) {
+	
+		if (pfParseFunc(pScan->pElem, pParam) != NULL) {
+			pScan = NodeDelReturnNext(pScan, pContainer->pDelElemFunc, pParam);
+			if (pScan) {
+				if (pScan->pNext == NULL) { pContainer->pTail = pScan; }
+				if (pScan->pPrev == NULL) { pContainer->pHead = pScan; }
+			} else {
+				pContainer->nCard--;
+				if (pContainer->nCard == 0)
+				{
+					pContainer->pHead = NULL;
+					pContainer->pTail = NULL;
+				}
+				continue;
+			}
+			pContainer->nCard--;
+		}
+		else { pScan = pScan->pNext; }
+	}
+	return NULL;
+}
+
+int ContainerCard(t_pContainer pContainer) {
+	return pContainer->nCard;
 }

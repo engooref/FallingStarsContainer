@@ -32,8 +32,8 @@
 
 #define WINDOW_TITLE_STR			"Falling Stars"
 
-#define SCREEN_WIDTH				((int)(640*(7.0/3.0)))
-#define SCREEN_HEIGHT				((int)(480*(7.0/3.0)))
+#define SCREEN_WIDTH				((int)(640*(16.0/9.0)))
+#define SCREEN_HEIGHT				((int)(480*(16.0/9.0)))
 #define SCREEN_OUT_PADDING_W		((int)(SCREEN_WIDTH/1))
 #define SCREEN_OUT_PADDING_H		((int)(SCREEN_HEIGHT/1))
 #define ANIMATION_TICK				(20)
