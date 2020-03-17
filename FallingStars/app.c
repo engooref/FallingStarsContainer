@@ -223,14 +223,14 @@ Uint32 _AppAnimateCallBack(Uint32 interval, void*pParam) {
 
 			int nbStarsToGenerate = rand() % (STAR_GEN_NB_MAX - STAR_GEN_NB_MIN + 1) + STAR_GEN_NB_MIN;
 
-			while (--nbStarsToGenerate != 0) { ContainerPushback(app.pStars, &app.starsParams); }
+			while ((nbStarsToGenerate--) && (ContainerCard(app.pStars) <= STAR_NB_MAX) ) { ContainerPushback(app.pStars, StarNew(app.genOrg.x, app.genOrg.y)); }
 		}
 	}
 
 	//Stars mouse cursor move tracking section------------------------------------------------------------------//
 	if (IsChangeOriginAsked()) {
 		//Take into account the falling stars generation origin change--------------------------------------//
-		//To complete...
+		ContainerParse(app.pStars, (t_ptfVV)StarOffsetLocation, &app.starsParams);
 
 
 		//Acknowledgment of the origin change------------------------//

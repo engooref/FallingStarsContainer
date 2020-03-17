@@ -5,7 +5,7 @@
 *      Author: xxxxxxxxxx
 ***************************************************************************/
 
-#define STAR_NB_MAX			(1162)
+#define STAR_NB_MAX			(3000)
 #define STAR_SPEED_MAX		(8)
 #define STAR_RGB_MIN		(100)
 #define STAR_RGB_MAX		(255)

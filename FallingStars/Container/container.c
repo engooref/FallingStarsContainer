@@ -226,46 +226,46 @@ void* ContainerGetat(t_pContainer pContainer, int nAt){
 	else { return NULL;}
 }
 
-//void* ContainerPopback(t_pContainer pContainer){
-//	if(pContainer->pTail->pElem) {
-//
-//		t_node* pTailC = pContainer->pTail->pPrev;
-//		void* pElem = pContainer->pTail->pElem;
-//		NodeDel(pContainer->pTail, pContainer->pDelElemFunc, pParam);
-//		pContainer->pTail = pTailC;
-//		pContainer->nCard--;
-//		return pElem;
-//
-//	} else { return NULL; }
-//}
-//void* ContainerPopfront(t_pContainer pContainer){
-//	if(pContainer->pHead->pElem) {
-//
-//		t_node* pHeadC = pContainer->pHead->pNext;
-//
-//		void* pElem = pContainer->pHead->pElem;
-//		NodeDel(pContainer->pHead, pContainer->pDelElemFunc, pParam);
-//		pContainer->pHead = pHeadC;
-//		pContainer->nCard--;
-//		return pElem;
-//
-//	} else { return NULL; }
-//}
-//void* ContainerPopat(t_pContainer pContainer, int nAt){
-//	if(nAt <= pContainer->nCard){
-//			t_node* pScan = pContainer->pHead;
-//			while (--nAt >= 0) { pScan = pScan->pNext; }
-//			if(pScan->pElem) {
-//
-//				void* pElem = pScan->pElem;
-//				NodeDel(pScan, pContainer->pDelElemFunc);
-//				pContainer->nCard--;
-//				return pElem;
-//
-//			} else { return NULL; }
-//		}
-//		else { return NULL; }
-//}
+void* ContainerPopback(t_pContainer pContainer){
+	if(pContainer->pTail->pElem) {
+
+		t_node* pTailC = pContainer->pTail->pPrev;
+		void* pElem = pContainer->pTail->pElem;
+		NodeDel(pContainer->pTail, pContainer->pDelElemFunc, pParam);
+		pContainer->pTail = pTailC;
+		pContainer->nCard--;
+		return pElem;
+
+	} else { return NULL; }
+}
+void* ContainerPopfront(t_pContainer pContainer){
+	if(pContainer->pHead->pElem) {
+
+		t_node* pHeadC = pContainer->pHead->pNext;
+
+		void* pElem = pContainer->pHead->pElem;
+		NodeDel(pContainer->pHead, pContainer->pDelElemFunc, pParam);
+		pContainer->pHead = pHeadC;
+		pContainer->nCard--;
+		return pElem;
+
+	} else { return NULL; }
+}
+void* ContainerPopat(t_pContainer pContainer, int nAt){
+	if(nAt <= pContainer->nCard){
+			t_node* pScan = pContainer->pHead;
+			while (--nAt >= 0) { pScan = pScan->pNext; }
+			if(pScan->pElem) {
+
+				void* pElem = pScan->pElem;
+				NodeDel(pScan, pContainer->pDelElemFunc);
+				pContainer->nCard--;
+				return pElem;
+
+			} else { return NULL; }
+		}
+		else { return NULL; }
+}
 
 void* ContainerParse(t_pContainer pContainer, t_ptfVV pfParseFunc, void*pParam){
 
